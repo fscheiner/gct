@@ -2,12 +2,12 @@
 .\"     Title: globus-url-copy
 .\"    Author: [see the "AUTHOR" section]
 .\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
-.\"      Date: 07/25/2019
+.\"      Date: 08/21/2020
 .\"    Manual: Grid Community Toolkit Manual
 .\"    Source: Grid Community Toolkit 6
 .\"  Language: English
 .\"
-.TH "GLOBUS\-URL\-COPY" "1" "07/25/2019" "Grid Community Toolkit 6" "Grid Community Toolkit Manual"
+.TH "GLOBUS\-URL\-COPY" "1" "08/21/2020" "Grid Community Toolkit 6" "Grid Community Toolkit Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -466,6 +466,24 @@ Set the algorithm type to use for all checksum operations during the transfer\&.
 Perform a checksum on the source and destination after each file transfer and compare the two\&. If they do not match, fail the transfer\&. The default algorithm used for this checksum is MD5, but other algorithms can be specified with the
 \fB\-checksum\-alg\fR
 parameter\&.
+.RE
+.SH "ENVIRONMENT"
+.sp
+The following environment variables are recognized:
+.PP
+\fBGLOBUS_HOSTNAME\fR
+.RS 4
+Overrides hostname
+.RE
+.PP
+\fBGLOBUS_DOMAIN_NAME\fR
+.RS 4
+Overrides domainname
+.RE
+.PP
+\fBGLOBUS_FTP_CLIENT_DATA_IP\fR
+.RS 4
+When using FTP transfer, the external IP of the machine (required when NAT is enabled)
 .RE
 .SH "AUTHOR"
 .sp

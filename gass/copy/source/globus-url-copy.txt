@@ -322,6 +322,20 @@ to a server that does not support data channel encryption (e.g. dCache)!
     transfer.  The default algorithm used for this checksum is MD5, but 
     other algorithms can be specified with the *-checksum-alg* parameter.
 
+[[globus-url-copy-ENVIRONMENT]]
+ENVIRONMENT
+-----------
+The following environment variables are recognized:
+
+*GLOBUS_HOSTNAME*::
+    Overrides hostname 
+
+*GLOBUS_DOMAIN_NAME*::
+    Overrides domainname
+
+*GLOBUS_FTP_CLIENT_DATA_IP*::
+    When using FTP transfer, the external IP of the machine (required when NAT is enabled)
+
 
 [[globus-url-copy-AUTHOR]]
 AUTHOR
