@@ -14,6 +14,7 @@ jobs:
         - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
       stage: test
       sudo: required
+        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
       services:
         - docker
 
@@ -26,23 +27,39 @@ jobs:
       - travis-ci/setup_tasks.sh
     - <<: *run_tests
       env:
+        - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
+    - <<: *run_tests
+      env:
         - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
 
-    - stage: deploy
+    - &run_deployment
+        stage: deploy
+        env:
+          - IMAGE=centos:centos7 TASK=srpms
+        sudo: required
+        skip_cleanup: true
+        services:
+          - docker
+
+        before_install:
+          - sudo apt-get update
+          - sleep 5
+          - sudo docker pull ${IMAGE}
+
+        script:
+        - travis-ci/setup_tasks.sh
+      
+      #PPC64LE
+    - <<: *run_tests
       env:
-        - IMAGE=centos:centos7 TASK=srpms
-      sudo: required
-      skip_cleanup: true
-      services:
-        - docker
-
-      before_install:
-        - sudo apt-get update
-        - sleep 5
-        - sudo docker pull ${IMAGE}
-
-      script:
-      - travis-ci/setup_tasks.sh
+        - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
+      arch: ppc64le
+    - <<: *run_tests
+      env:
+        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
+      arch: ppc64le
+    - <<: *run_deployment
+      arch: ppc64le
       deploy:
         # - provider: releases
         #   on:
