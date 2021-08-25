@@ -28,14 +28,16 @@ jobs:
     - <<: *run_tests
       env:
         - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
+      arch: ppc64le
     - <<: *run_tests
       env:
         - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
-
+      arch: ppc64le
     - &run_deployment
         stage: deploy
         env:
           - IMAGE=centos:centos7 TASK=srpms
+        arch: ppc64le
         sudo: required
         skip_cleanup: true
         services:
@@ -50,17 +52,17 @@ jobs:
         - travis-ci/setup_tasks.sh
       
       #PPC64LE
-    - <<: *run_tests
-      env:
-        - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
-      arch: ppc64le
-    - <<: *run_tests
-      env:
-        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
-      arch: ppc64le
-    - <<: *run_deployment
-      arch: ppc64le
-      deploy:
+#    - <<: *run_tests
+#      env:
+#        - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
+#      arch: ppc64le
+#    - <<: *run_tests
+#      env:
+#        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
+#      arch: ppc64le
+#    - <<: *run_deployment
+#      arch: ppc64le
+#      deploy:
         # - provider: releases
         #   on:
         #     tags: true
