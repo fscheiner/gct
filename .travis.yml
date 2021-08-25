@@ -12,9 +12,11 @@ jobs:
       # Template; subsequent uses modify 'env'
       env:
         - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
+      arch: ppc64le
       stage: test
       sudo: required
         - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
+      arch: ppc64le
       services:
         - docker
 
@@ -25,14 +27,6 @@ jobs:
 
       script:
       - travis-ci/setup_tasks.sh
-    - <<: *run_tests
-      env:
-        - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
-      arch: ppc64le
-    - <<: *run_tests
-      env:
-        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
-      arch: ppc64le
     - &run_deployment
         stage: deploy
         env:
@@ -51,18 +45,6 @@ jobs:
         script:
         - travis-ci/setup_tasks.sh
       
-      #PPC64LE
-#    - <<: *run_tests
-#      env:
-#        - IMAGE=centos:centos7 TASK=tests COMPONENTS=udt,myproxy,ssh
-#      arch: ppc64le
-#    - <<: *run_tests
-#      env:
-#        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
-#      arch: ppc64le
-#    - <<: *run_deployment
-#      arch: ppc64le
-#      deploy:
         # - provider: releases
         #   on:
         #     tags: true
