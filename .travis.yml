@@ -15,8 +15,6 @@ jobs:
       arch: ppc64le
       stage: test
       sudo: required
-        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
-      arch: ppc64le
       services:
         - docker
 
@@ -27,24 +25,28 @@ jobs:
 
       script:
       - travis-ci/setup_tasks.sh
-    - &run_deployment
-        stage: deploy
-        env:
-          - IMAGE=centos:centos7 TASK=srpms
-        arch: ppc64le
-        sudo: required
-        skip_cleanup: true
-        services:
-          - docker
+    - <<: *run_tests
+      env:
+        - IMAGE=centos:centos7 TASK=tests COMPONENTS=gram5
+      arch: ppc64le
 
-        before_install:
-          - sudo apt-get update
-          - sleep 5
-          - sudo docker pull ${IMAGE}
+    - stage: deploy
+      env:
+        - IMAGE=centos:centos7 TASK=srpms
+      arch: ppc64le
+      sudo: required
+      skip_cleanup: true
+      services:
+        - docker
 
-        script:
-        - travis-ci/setup_tasks.sh
-      
+      before_install:
+        - sudo apt-get update
+        - sleep 5
+        - sudo docker pull ${IMAGE}
+
+      script:
+      - travis-ci/setup_tasks.sh
+      deploy:
         # - provider: releases
         #   on:
         #     tags: true
