@@ -16,6 +16,8 @@ jobs:
         components: ['udt,myproxy,ssh', 'gram5']
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
     
       - name: build/test on ${{ matrix.image }} with ${{ matrix.components }}
         env:

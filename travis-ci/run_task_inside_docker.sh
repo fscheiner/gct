@@ -12,8 +12,6 @@ case $(</etc/redhat-release) in
     CentOS*\ 6*) OS=centos6 ;;
     CentOS*\ 7*) OS=centos7 ;;
     Rocky\ Linux*\ 8*) OS=rockylinux8 ;;
-    Fedora*\ 26*) OS=fedora26 ;;
-    Fedora*\ 27*) OS=fedora27 ;;
     *) OS=unknown ;;
 esac
 
@@ -25,6 +23,8 @@ case $OS in
               ;;
     rockylinux8)
               yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+              dnf -y install dnf-plugins-core
+              dnf config-manager --set-enabled powertools
               ;;
 esac
 
@@ -36,6 +36,12 @@ packages=(gcc gcc-c++ make autoconf automake libtool \
           'perl(Test)' 'perl(Test::More)' 'perl(File::Spec)' \
           'perl(URI)' file sudo bison patch curl \
           pam pam-devel libedit libedit-devel)
+
+if [[ $OS == rockylinux8 ]]; then
+
+    # provides `cmp` used by `packaging/git-dirt-filter`
+    packages+=(diffutils)
+fi
 
 if [[ $TASK == tests ]]; then
     set +e
