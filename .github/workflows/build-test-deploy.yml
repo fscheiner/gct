@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        image: ['centos:centos7']
+        image: ['centos:centos7', 'rockylinux:8']
         components: ['udt,myproxy,ssh', 'gram5']
     steps:
       - uses: actions/checkout@v2
