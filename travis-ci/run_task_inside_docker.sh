@@ -11,6 +11,7 @@ set -e
 case $(</etc/redhat-release) in
     CentOS*\ 6*) OS=centos6 ;;
     CentOS*\ 7*) OS=centos7 ;;
+    Rocky\ Linux*\ 8*) OS=rockylinux8 ;;
     Fedora*\ 26*) OS=fedora26 ;;
     Fedora*\ 27*) OS=fedora27 ;;
     *) OS=unknown ;;
@@ -21,6 +22,9 @@ case $OS in
     centos6)  yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
               ;;
     centos7)  yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+              ;;
+    rockylinux8)
+              yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
               ;;
 esac
 
