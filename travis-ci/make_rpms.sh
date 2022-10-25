@@ -16,6 +16,14 @@ usage()
 
 umask 022
 
+case $(</etc/redhat-release) in
+    CentOS*\ 7*) OS=centos7 ;;
+    CentOS\ Stream*\ 8*) OS=centos-stream-8;;
+    CentOS\ Stream*\ 9*) OS=centos-stream-9;;
+    Rocky\ Linux*\ 8*) OS=rockylinux8 ;;
+    Rocky\ Linux*\ 9*) OS=rockylinux9 ;;
+    *) OS=unknown ;;
+esac
 
 root=$(git rev-parse --show-toplevel)
 packagingdir=$root/packaging
@@ -81,8 +89,27 @@ cat <<EOF >> "$topdir/.rpmmacros"
 %_excludedocs 0
 EOF
 
+# Limit package list according to OS possibilities
+all_packages=( $(grep -v '^#' $fedoradir/ORDERING | grep '[^[:space:]]') )
 
-packages=( $(grep -v '^#' $fedoradir/ORDERING | grep '[^[:space:]]') )
+if [[ $OS == *7 ]]; then
+
+    packages=( ${all_packages[@]} )
+else
+    # myproxy-oauth requires Python 2.x and respective Python 2.x dependencies
+    # that aren't available on CentOS Stream 8 / Rocky Linux 8 and upwards, so
+    # is removed for this case
+    packages=( ${all_packages[@]/myproxy-oauth/} )
+
+    if [[ $OS == *9 ]]; then
+
+        # Not building:
+        # * globus-xio-udt-driver
+        packages_9=( ${packages[@]/globus-xio-udt-driver/} )
+        packages=( ${packages_9[@]} )
+    fi
+fi
+
 
 cp -f "$tarballdir"/*.tar.gz "$topdir"/SOURCES
 

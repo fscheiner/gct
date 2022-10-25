@@ -10,6 +10,15 @@
 
 set -eu
 
+case $(</etc/redhat-release) in
+    CentOS*\ 7*) OS=centos7 ;;
+    CentOS\ Stream*\ 8*) OS=centos-stream-8;;
+    CentOS\ Stream*\ 9*) OS=centos-stream-9;;
+    Rocky\ Linux*\ 8*) OS=rockylinux8 ;;
+    Rocky\ Linux*\ 9*) OS=rockylinux9 ;;
+    *) OS=unknown ;;
+esac
+
 root=$(git rev-parse --show-toplevel)
 cd "$root"
 
@@ -45,9 +54,18 @@ package_version=$(grep '^PACKAGE_VERSION =' Makefile | cut -d ' ' -f 3)
 time make dist && mv "${package_name}-${package_version}.tar.gz" package-output/
 
 echo '================================================================================'
-pushd "$root/myproxy/oauth/source"
-time python setup.py sdist
-mv dist/*.tar.gz "$root/package-output/"
+if [[ $OS == *7 ]]; then
+
+    pushd "$root/myproxy/oauth/source"
+    time python setup.py sdist
+    mv dist/*.tar.gz "$root/package-output/"
+    popd
+else
+    # myproxy-oauth requires Python 2.x and respective Python 2.x dependencies
+    # that aren't available on CentOS Stream 8 / Rocky Linux 8 and upwards, so
+    # is ignored for this case
+    :
+fi
 
 err=0
 pushd "$root/package-output/"
@@ -69,6 +87,4 @@ if [[ $err -ne 0 ]]; then
     echo "Sanity check failed -- bailing"
     exit $err
 fi
-
-popd
 
