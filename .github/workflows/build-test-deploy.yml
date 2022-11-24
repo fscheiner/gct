@@ -16,18 +16,8 @@ jobs:
       # Don't cancel the remaining running jobs if some job(s) fail(s)
       fail-fast: false
       matrix:
-        image: ['centos:centos7', 'rockylinux:8', 'quay.io/centos/centos:stream8']
+        image: ['centos:centos7', 'rockylinux:8', 'rockylinux:9', 'quay.io/centos/centos:stream8', 'quay.io/centos/centos:stream9' ]
         components: ['udt,myproxy,ssh', 'gram5']
-        # Ignore UDT for the CentOS Stream 9 case because libnice is not available there yet
-        include:
-          - image: 'quay.io/centos/centos:stream9'
-            components: 'myproxy,ssh'
-          - image: 'quay.io/centos/centos:stream9'
-            components: 'gram5'
-          - image: 'rockylinux:9'
-            components: 'myproxy,ssh'
-          - image: 'rockylinux:9'
-            components: 'gram5'
     steps:
       - uses: actions/checkout@v2
         with:
