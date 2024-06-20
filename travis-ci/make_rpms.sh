@@ -92,14 +92,7 @@ EOF
 # Limit package list according to OS possibilities
 all_packages=( $(grep -v '^#' $fedoradir/ORDERING | grep '[^[:space:]]') )
 
-if [[ $OS != *9 ]]; then
-
-    packages=( ${all_packages[@]} )
-else
-    # Not building globus-xio-udt-driver on *9
-    packages_9=( ${all_packages[@]/globus-xio-udt-driver/} )
-    packages=( ${packages_9[@]} )
-fi
+packages=( ${all_packages[@]} )
 
 cp -f "$tarballdir"/*.tar.gz "$topdir"/SOURCES
 

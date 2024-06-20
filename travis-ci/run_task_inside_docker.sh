@@ -109,15 +109,7 @@ elif [[ $TASK == *rpms ]]; then
     # for globus-gridftp-server:
     packages+=(fakeroot)
     # for globus-xio-udt-driver:
-    if [[ $OS == *9 ]]; then
-
-        # libnice-devel is not available for CentOS Stream 9 / Rocky Linux 9.
-        #
-        # make_rpms.sh was also updated in this regard.
-        :
-    else
-        packages+=(udt udt-devel glib2-devel libnice-devel gettext-devel libffi-devel)
-    fi
+    packages+=(udt udt-devel glib2-devel libnice-devel gettext-devel libffi-devel)
     # for globus-gram-job-manager:
     packages+=(libxml2-devel)
     # for myproxy:
